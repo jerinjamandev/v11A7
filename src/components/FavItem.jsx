@@ -1,6 +1,17 @@
 import React from 'react';
+import { X } from 'react-feather';
+import { ToastContainer, toast } from 'react-toastify';
 
-const FavItem = () => {
+
+const FavItem = ({items, Amount,setitems,setAmount}) => {
+
+    const handelRemove=(id,currentBidPrice)=>{
+        const removeitem=items.filter(remove=>remove.id!==id)
+        setitems(removeitem)
+        const price=parseFloat(currentBidPrice.replace(/,/g, ''))
+        setAmount(preeprice=>preeprice-price)
+        toast.warn("Item remove Your Favorite List")
+    }
     return (
         <div>
         <h2 className="text-xl font-semibold mb-4 flex items-center gap-3  justify-center"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
@@ -11,16 +22,54 @@ const FavItem = () => {
             <div className="card bg-base-100 shadow-sm h-full">
                 <div className="card-body">
                     
-                      <h2 className="text-xl text-center">No favorites yet</h2>
-                            <p className="text-gray-600 mb-4 text-center">Click the heart icon on any item <br /> to add it to your favorites</p>
-                    
+                 {items.length===0&& <> 
+                 <h2 className="text-xl text-center">No favorites yet</h2>
+                <p className="text-gray-600 mb-4 text-center">Click the heart icon on any item <br /> to add it to your favorites</p>
+                    </>}
+            
+
+                    {
+                            items.length > 0 &&
+                            <div>
+                                {
+                                    items.map(favorite => (
+                                        <div className="max-w-sm w-full my-1 flex items-start border rounded-md p-3 shadow-sm hover:shadow-md transition-shadow">
+                                            <img
+                                                src={favorite.image}
+                                                alt="Guitar"
+                                                className="w-16 h-16 object-cover rounded mr-3"
+                                            />
+                                            <div className="flex-1">
+                                                <div className="flex justify-between items-start">
+                                                    <h3 className="text-sm font-medium text-gray-800 leading-tight">
+                                                        {favorite.title}
+                                                    </h3>
+                                                    <button onClick={() => handelRemove(favorite.id, favorite.currentBidPrice)} className="text-gray-600 hover:text-black">
+                                                        <X size={16} />
+                                                    </button>
+                                                </div>
+                                                <div className="text-sm mt-2 text-gray-700">
+                                                    <span className="font-semibold mr-3">$ {favorite.currentBidPrice}</span>
+                                                    <span className="text-gray-500">Bids: {favorite.bidsCount}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))
+                                }
+                            </div>
+                        }
+
+
+
+
 
                 </div>
             </div>
 
             <div className='flex items-center justify-between mt-3 px-3'>
                 <h2 className='text-2xl'>Total bids Amount</h2>
-                <h2 className='text-2xl'>$ <span>0</span></h2>
+                <h2 className='text-2xl'>$ <span>{Amount===0?Amount:Amount.toFixed(2)}</span></h2>
+
             </div>
         </div>
     </div>

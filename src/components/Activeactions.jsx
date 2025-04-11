@@ -1,6 +1,23 @@
 import React from 'react';
+import { useState } from 'react';
+import { Heart } from 'react-feather';
+import { ToastContainer, toast } from 'react-toastify';
 
-const Activeactions = ({datas}) => {
+
+const Activeactions = ({datas,setitems,setAmount}) => {
+
+  const [click,setclick]=useState([])
+
+  const handleadd=(data,id)=>{
+    setclick((predata)=>[...predata,id])
+    setitems((predata)=>[...predata,data])
+    const price=parseFloat(data.currentBidPrice.replace(/,/g, ''))
+    setAmount(preeprice=>preeprice+price)
+    toast.success("Item Add Your Favorite List")
+
+  }
+
+
     return (
         <div>
 
@@ -25,24 +42,23 @@ const Activeactions = ({datas}) => {
               <div className="avatar">
                 <div className="mask mask-squircle h-12 w-12">
                   <img
-                    src="https://img.daisyui.com/images/profile/demo/2@94.webp"
+                    src={data.image}
                     alt="Avatar Tailwind CSS Component" />
                 </div>
               </div>
               <div>
-                <div className="font-bold">Hart Hagerty</div>
-                <div className="text-sm opacity-50">United States</div>
+                <div className="font-bold">{data.title}</div>
               </div>
             </div>
           </td>
           <td>
-            Zemlak, Daniel and Leannon
-            <br />
-            <span className="badge badge-ghost badge-sm">Desktop Support Technician</span>
+            
+          ${data.currentBidPrice}
+            
           </td>
-          <td>Purple</td>
+          <td>{data.timeLeft}</td>
           <th>
-            <button className="btn btn-ghost btn-xs">details</button>
+            <button className={`${click.includes(data.id) && 'cursor-no-drop'}`} disabled={click.includes(data.id)} onClick={()=>handleadd(data,data.id)}><Heart size={24} color={click.includes(data.id)?"red":"gray"} fill={click.includes(data.id)?"red":"none"}/></button>
           </th>
         </tr>
       ))}
